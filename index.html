@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Langue des signes pour Maëlle</title>
+  <meta name="description" content="Apprendre la langue des signes française (LSF) avec un personnage animé : dictionnaire, leçons, entraînement et progrès.">
+  <meta name="theme-color" content="#07060A">
+  <link rel="preload" as="image" href="assets/fond-fuji-sakura.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2317142E'/%3E%3Cpath d='M22 46V22a3 3 0 0 1 6 0v12V16a3 3 0 0 1 6 0v18V18a3 3 0 0 1 6 0v18-10a3 3 0 0 1 6 0v14c0 8-6 14-14 14h-2c-5 0-8-3-11-7l-6-8a3 3 0 0 1 5-3z' fill='%23F7A8CB'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Shippori+Mincho+B1:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="fond" aria-hidden="true"></div>
+  <div class="voile" aria-hidden="true"></div>
+  <canvas id="petales-fond" aria-hidden="true"></canvas>
+  <a class="evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="barre">
+    <a class="marque" href="#/" aria-label="Langue des signes pour Maëlle, accueil">
+      <span class="marque-signe" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><path d="M22 46V22a3 3 0 0 1 6 0v12V16a3 3 0 0 1 6 0v18V18a3 3 0 0 1 6 0v18-10a3 3 0 0 1 6 0v14c0 8-6 14-14 14h-2c-5 0-8-3-11-7l-6-8a3 3 0 0 1 5-3z"/></svg>
+      </span>
+      <span class="marque-texte">Langue des signes <em>pour Maëlle</em></span>
+    </a>
+    <span class="barre-titre" id="barre-titre" aria-hidden="true"></span>
+    <nav class="nav" aria-label="Navigation principale">
+      <span class="nav-indic" aria-hidden="true"></span>
+      <a href="#/" data-route="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Accueil</a>
+      <a href="#/decouvrir" data-route="decouvrir"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Découvrir</a>
+      <a href="#/apprendre" data-route="apprendre"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Apprendre</a>
+      <a href="#/entrainer" data-route="entrainer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>S'entraîner</a>
+      <a href="#/progres" data-route="progres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progrès</a>
+      <a href="#/mes-signes" data-route="mes-signes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg>Mes signes</a>
+      <a href="#/culture" data-route="culture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M5 6v14M19 6v14M4 10h16M8 10v10M16 10v10M2 4c4 1.5 16 1.5 20 0"/></svg>Culture sourde</a>
+      <a href="#/reglages" data-route="reglages" class="nav-reglages" aria-label="Réglages">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+        <span class="nav-reglages-texte">Réglages</span>
+      </a>
+    </nav>
+    <div class="barre-statut" aria-live="polite">
+      <a class="pastille-sync" id="pastille-sync" href="#/reglages" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18Z"/><path class="sync-coche" d="m9.5 13.5 2 2 3.5-4"/><path class="sync-barre" d="M4 4l16 16"/></svg>
+      </a>
+      <span class="pastille-serie" id="pastille-serie" title="Série de jours"></span>
+      <span class="pastille-xp" id="pastille-xp" title="Points d'expérience"></span>
+    </div>
+  </header>
+
+  <main id="contenu" tabindex="-1"></main>
+
+  <footer class="pied">
+    <span>Fait avec soin pour Maëlle. Les dessins aident à apprendre : en cas de doute, vérifie sur <a href="https://dico.elix-lsf.fr/" target="_blank" rel="noopener noreferrer">Elix</a>.</span>
+    <span>Photo de fond : lac Kawaguchi et mont Fuji, par <a href="https://commons.wikimedia.org/wiki/File:Lake_Kawaguchiko_Sakura_Mount_Fuji_1.JPG" target="_blank" rel="noopener noreferrer">Midori</a>, licence <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">CC BY 3.0</a></span>
+  </footer>
+
+  <canvas id="petales-avant" aria-hidden="true"></canvas>
+
+  <nav class="onglets-mobile" aria-label="Navigation">
+    <a href="#/" data-route="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Accueil</a>
+    <a href="#/decouvrir" data-route="decouvrir"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Découvrir</a>
+    <a href="#/apprendre" data-route="apprendre"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Apprendre</a>
+    <a href="#/entrainer" data-route="entrainer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>S'entraîner</a>
+    <button type="button" id="bouton-plus" aria-expanded="false" aria-controls="menu-plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>Plus</button>
+  </nav>
+  <div class="menu-plus" id="menu-plus" hidden>
+    <a href="#/progres" data-route="progres">Progrès</a>
+    <a href="#/mes-signes" data-route="mes-signes">Mes signes</a>
+    <a href="#/culture" data-route="culture">Culture sourde</a>
+    <a href="#/reglages" data-route="reglages">Réglages</a>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="degrade-anneau" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD0E3"/><stop offset=".55" stop-color="#FF9EC6"/><stop offset="1" stop-color="#FF5FAE"/></linearGradient></defs></svg>
+
+  <!-- moteur d'animation -->
+  <script src="js/moteur/mains.js"></script>
+  <script src="js/moteur/corps.js"></script>
+  <script src="js/moteur/lecteur.js"></script>
+  <!-- données -->
+  <script src="js/lsf.js"></script>
+  <script src="js/data/alphabet-nombres.js"></script>
+  <script src="js/data/salutations-famille.js"></script>
+  <script src="js/data/emotions-verbes.js"></script>
+  <script src="js/data/ecole-maison.js"></script>
+  <script src="js/data/nourriture-nature.js"></script>
+  <script src="js/data/temps-loisirs.js"></script>
+  <script src="js/data/extra-quotidien.js"></script>
+  <!-- signes reconstitués sans description écrite : tous marqués « à vérifier » -->
+  <script src="js/data/extra-monde.js"></script>
+  <script src="js/contenu.js"></script>
+  <!-- application -->
+  <script src="js/store.js"></script>
+  <script src="js/recherche.js"></script>
+  <script src="js/lecons.js"></script>
+  <script src="js/petales.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages.js"></script>
+  <script src="js/pratique.js"></script>
+  <script src="js/app.js"></script>
+  <!-- compte en ligne (Firebase) : chargé après le site, qui marche aussi sans -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/sync.js"></script>
+</body>
+</html>

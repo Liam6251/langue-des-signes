@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Test moteur</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { padding: 16px; background: #07060A; }
+  .grid { display: grid; grid-template-columns: repeat(var(--col, 4), 1fr); gap: 8px; }
+  .c { background: rgba(32, 20, 34, .9); border-radius: 16px; padding: 6px; border: 1px solid var(--trait); }
+  .c p { margin: 4px 8px; font-size: 13px; color: #fff; }
+  .lsf-scene { width: 100%; display: block; }
+  .grid .c > div > .lsf-scene { overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="grid" id="g"></div>
+<script src="../js/moteur/mains.js"></script>
+<script src="../js/moteur/corps.js"></script>
+<script src="../js/moteur/lecteur.js"></script>
+<script src="../js/lsf.js"></script>
+<script src="../js/data/alphabet-nombres.js"></script>
+<script src="../js/data/salutations-famille.js"></script>
+<script src="../js/data/emotions-verbes.js"></script>
+<script src="../js/data/ecole-maison.js"></script>
+<script src="../js/data/nourriture-nature.js"></script>
+<script src="../js/data/temps-loisirs.js"></script>
+<script src="../js/data/extra-quotidien.js"></script>
+<script src="../js/data/extra-monde.js"></script>
+<script>
+// ?mode=formes&orient=avant  : galerie de toutes les configurations, en gros plan
+// ?id=bonjour&vue=yeux&t=0.5 : un signe en grand (t = moment de l'animation 0..1, sinon animé)
+const P = new URLSearchParams(location.search);
+if (P.get('style') === 'l') {
+  LSFCorps.regler({ coiffure: 'ebouriffe', noeud: false, cernes: true });
+  const v = { '--peau': '#F2E4D8', '--peau-ombre': '#D7BCAF', '--paume': '#F6EBE1', '--peau-clair': '#F9F2EC', '--cheveux': '#15141A', '--cheveux-sombre': '#0D0D11',
+    '--cheveux-reflet': '#4E4D53', '--haut': '#ECE9E3', '--haut-ombre': '#AFA9B0', '--haut-clair': '#F7F6F4', '--haut-revers': '#EEEBE6', '--cerne': '#B79AA8', '--cerne-trait': '#7A5468' };
+  Object.entries(v).forEach(([k, x]) => document.documentElement.style.setProperty(k, x));
+}
+const g = document.getElementById('g');
+if (P.get('mode') === 'formes') {
+  g.style.setProperty('--col', P.get('col') || 6);
+  const orient = { avant: ['avant', 'haut'], dedans: ['dedans', 'haut'], arriere: ['arriere', 'haut'], bas: ['bas', 'avant'] }[P.get('orient') || 'avant'];
+  const seules = P.get('formes') ? P.get('formes').split(',') : Object.keys(LSFMains.FORMES);
+  seules.forEach((nom) => {
+    const c = document.createElement('div'); c.className = 'c';
+    const a = document.createElement('div'); c.appendChild(a);
+    const p = document.createElement('p'); p.textContent = nom; c.appendChild(p); g.appendChild(c);
+    LSFMoteur.vignette(a, { id: 't', mot: nom, images: [{ d: { cfg: nom, at: 'dactylo', paume: orient[0], doigts: orient[1] } }] });
+    a.querySelector('svg').setAttribute('viewBox', '78 120 150 150');
+  });
+} else if (P.get('ids')) {
+  g.style.setProperty('--col', P.get('col') || 4);
+  // ids=bonjour,merci@0.8 : « @t » = moment propre à ce signe (0..1), sinon le t général
+  P.get('ids').split(',').forEach((brut) => {
+    const [id, tPropre] = brut.split('@');
+    const s = LSF.parId[id]; if (!s) return;
+    const c = document.createElement('div'); c.className = 'c';
+    const a = document.createElement('div'); a.className = 'scene'; c.appendChild(a);
+    const p = document.createElement('p'); p.textContent = brut; c.appendChild(p); g.appendChild(c);
+    const L = new LSFMoteur.Lecteur(a, { vue: P.get('vue') || 'face', autoplay: false, trajectoire: false });
+    L.charger(s); if (P.get('transp')) L.transparent(true); L.aller(+(tPropre || P.get('t') || 0.5));
+  });
+} else {
+  g.style.setProperty('--col', 1);
+  const s = LSF.parId[P.get('id') || 'bonjour'];
+  const c = document.createElement('div'); c.className = 'c scene'; c.style.maxWidth = '720px';
+  g.appendChild(c);
+  const L = new LSFMoteur.Lecteur(c, { vue: P.get('vue') || 'face', autoplay: !P.get('t') });
+  L.charger(s);
+  if (P.get('t')) L.aller(+P.get('t'));
+  if (P.get('zoom')) c.querySelector('svg').setAttribute('viewBox', P.get('zoom'));
+}
+</script>
+</body>
+</html>
