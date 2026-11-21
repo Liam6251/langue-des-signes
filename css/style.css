@@ -1474,3 +1474,35 @@ html.filtres-ouverts { overflow: hidden; }
 .compte-statut[data-etat="erreur"] { color: var(--danger); }
 .btn-lien { background: none; border: 0; padding: 8px 4px; color: var(--sakura-clair); text-decoration: underline; font: inherit; font-size: 15px; cursor: pointer; }
 .btn-lien:disabled { opacity: .5; cursor: default; }
+
+/* ---------- ÉCRAN DE CONNEXION (premier passage sur un appareil) ---------- */
+.ecran-connexion {
+  position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; overflow-y: auto;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(70% 45% at 50% 18%, rgba(255, 130, 185, .2), transparent 70%),
+    linear-gradient(180deg, rgba(7, 5, 9, .55), rgba(7, 5, 9, .92)),
+    url("../assets/fond-fuji-sakura.jpg") center 30% / cover no-repeat, #07060A;
+}
+.ecran-connexion[hidden] { display: none; }
+html.ec-ouvert, html.ec-ouvert body { overflow: hidden; }
+.ec-carte {
+  width: min(440px, 100%); padding: 30px 24px 24px; border-radius: 26px; text-align: center;
+  background: rgba(8, 5, 10, .86); border: 1px solid var(--trait-fort, rgba(255, 180, 212, .3));
+  box-shadow: 0 30px 80px -20px #000, 0 0 60px -30px var(--lueur, #FF5FAE), inset 0 1px 0 rgba(255, 255, 255, .06);
+  backdrop-filter: blur(14px); animation: ec-arrive .5s cubic-bezier(.2, .8, .2, 1) both;
+}
+.ec-logo { width: 56px; height: 56px; border-radius: 18px; margin: 0 auto 14px; }
+.ec-logo svg { width: 34px; height: 34px; }
+.ec-carte h1 { font-size: clamp(34px, 9vw, 46px); margin-bottom: 8px; }
+.ec-carte h1 .accent { color: var(--sakura); text-shadow: 0 0 30px var(--lueur); }
+.ec-sous { color: var(--texte-2); font-size: 16px; line-height: 1.45; margin: 0 0 18px; }
+.ec-attente { color: var(--texte-2); padding: 20px 0; animation: pulse-sync 1.2s ease-in-out infinite; }
+.ec-carte .compte-form { text-align: left; margin-top: 0; }
+.ec-carte .compte-form .champ { font-size: 17px; }
+.ec-carte .compte-form .btn { width: 100%; justify-content: center; }
+.ec-carte .btn-lien { justify-self: center; }
+.ec-voir { display: flex !important; align-items: center; gap: 8px; font-weight: 400 !important; font-size: 15px; color: var(--texte-2); cursor: pointer; }
+.ec-voir input { width: 18px; height: 18px; accent-color: var(--sakura); }
+@keyframes ec-arrive { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+.mouvement-reduit .ec-carte, .mouvement-reduit .ec-attente { animation: none; }

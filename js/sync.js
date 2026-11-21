@@ -56,7 +56,52 @@
   };
   window.LSFSync = api;
 
-  if (!cfg || !cfg.apiKey || !window.firebase || !firebase.initializeApp) { rafraichirPage(); return; }
+  /* ---------- écran de connexion (index.html) ----------
+   * Affiché au premier passage sur un appareil. Une fois connectée, Firebase garde la session
+   * dans ce navigateur : l'écran ne revient plus (sauf si elle se déconnecte). */
+  const ecran = document.getElementById('ecran-connexion');
+  function montrerEcran(oui) {
+    if (!ecran) return;
+    try { if (oui) localStorage.removeItem('lsf-compte'); else localStorage.setItem('lsf-compte', '1'); } catch (e) { /* ignore */ }
+    ecran.hidden = !oui;
+    document.documentElement.classList.toggle('ec-ouvert', oui);
+    if (oui) {
+      document.getElementById('ec-attente').hidden = true;
+      document.getElementById('ec-form').hidden = false;
+      const champ = document.getElementById('ec-email');
+      if (champ && !champ.value && window.matchMedia('(hover: hover)').matches) champ.focus();
+    }
+  }
+  function brancherEcran() {
+    if (!ecran) return;
+    const form = document.getElementById('ec-form'), err = document.getElementById('ec-erreur');
+    const email = document.getElementById('ec-email'), mdp = document.getElementById('ec-mdp');
+    const occupe = (b) => form.querySelectorAll('button').forEach((x) => { x.disabled = b; });
+    const lancer = (action, ok) => {
+      err.textContent = '';
+      occupe(true);
+      action().then(() => { occupe(false); mdp.value = ''; if (ok && window.LSFUI) window.LSFUI.toast(ok); },
+        (e) => { err.textContent = message(e); occupe(false); });
+    };
+    form.addEventListener('submit', (e) => { e.preventDefault(); lancer(() => api.connecter(email.value, mdp.value), 'Connectée ! Bon apprentissage.'); });
+    document.getElementById('ec-creer').addEventListener('click', () => {
+      mdp.setAttribute('autocomplete', 'new-password');
+      lancer(() => api.creer(email.value, mdp.value), 'Compte créé ! Ta progression est enregistrée en ligne.');
+    });
+    document.getElementById('ec-voir').addEventListener('change', (e) => { mdp.type = e.target.checked ? 'text' : 'password'; });
+    document.getElementById('ec-oubli').addEventListener('click', () => {
+      if (!email.value.trim()) { err.textContent = 'Écris ton e-mail, puis clique encore sur « Mot de passe oublié ? ».'; email.focus(); return; }
+      err.textContent = ''; occupe(true);
+      api.oublie(email.value).then(
+        () => { occupe(false); err.textContent = ''; if (window.LSFUI) window.LSFUI.toast('E-mail envoyé : ouvre-le pour choisir un nouveau mot de passe.'); },
+        (e) => { occupe(false); err.textContent = message(e); });
+    });
+  }
+
+  // pas de service de connexion (pas d'internet, fichier local) : on laisse entrer sans compte
+  const sansCompte = () => { if (ecran) { ecran.hidden = true; document.documentElement.classList.remove('ec-ouvert'); } };
+
+  if (!cfg || !cfg.apiKey || !window.firebase || !firebase.initializeApp) { sansCompte(); rafraichirPage(); return; }
 
   let auth, db;
   try {
@@ -64,7 +109,7 @@
     auth = firebase.auth();
     auth.languageCode = 'fr';
     db = firebase.firestore();
-  } catch (e) { console.error('[synchro]', e); rafraichirPage(); return; }
+  } catch (e) { console.error('[synchro]', e); sansCompte(); rafraichirPage(); return; }
   info.dispo = true;
   afficherStatut();
 
@@ -183,6 +228,7 @@
       doc = null;
       statut('deconnecte');
     }
+    montrerEcran(!u);
     rafraichirPage(!u);
   });
 
@@ -191,6 +237,7 @@
   api.oublie = (email) => auth.sendPasswordResetEmail(String(email).trim());
   api.deconnecter = async () => { if (minuteur) await envoyer(); return auth.signOut(); };
   api.synchroniser = () => envoyer();
+  brancherEcran();
 
   // les pages qui montrent le compte se redessinent quand l'état de connexion change
   // (l'accueil seulement s'il doit montrer « Connecte-toi »)

@@ -19,6 +19,38 @@
   <canvas id="petales-fond" aria-hidden="true"></canvas>
   <a class="evitement" href="#contenu">Aller au contenu</a>
 
+  <!-- écran de connexion : la première chose qu'on voit sur un appareil pas encore connecté (voir js/sync.js) -->
+  <div class="ecran-connexion" id="ecran-connexion" role="dialog" aria-modal="true" aria-labelledby="ec-titre" hidden>
+    <div class="ec-carte">
+      <span class="marque-signe ec-logo" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><path d="M22 46V22a3 3 0 0 1 6 0v12V16a3 3 0 0 1 6 0v18V18a3 3 0 0 1 6 0v18-10a3 3 0 0 1 6 0v14c0 8-6 14-14 14h-2c-5 0-8-3-11-7l-6-8a3 3 0 0 1 5-3z"/></svg>
+      </span>
+      <h1 id="ec-titre">Salut <span class="accent">Maëlle</span> !</h1>
+      <p class="ec-sous">Connecte-toi pour retrouver ta progression sur ton téléphone, ta tablette et tes ordinateurs. Tu ne le fais qu'une fois par appareil.</p>
+      <p class="ec-attente" id="ec-attente">Chargement…</p>
+      <form class="compte-form" id="ec-form" novalidate hidden>
+        <label><span>E-mail</span><input class="champ" type="email" id="ec-email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required></label>
+        <label><span>Mot de passe <small>(6 caractères minimum)</small></span><input class="champ" type="password" id="ec-mdp" autocomplete="current-password" minlength="6" required></label>
+        <label class="ec-voir"><input type="checkbox" id="ec-voir"> Afficher le mot de passe</label>
+        <p class="compte-erreur" id="ec-erreur" role="alert"></p>
+        <button type="submit" class="btn btn-principal btn-grand">Se connecter</button>
+        <button type="button" class="btn btn-fantome" id="ec-creer">Première fois ? Créer mon compte</button>
+        <button type="button" class="btn-lien" id="ec-oubli">Mot de passe oublié ?</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // pas encore connectée sur cet appareil : l'écran de connexion s'affiche tout de suite (sans montrer le site avant)
+    (function () {
+      var e = document.getElementById('ecran-connexion'), deja = false;
+      try { deja = localStorage.getItem('lsf-compte') === '1'; } catch (x) { /* ignore */ }
+      if (deja || location.protocol === 'file:') return;
+      e.hidden = false; document.documentElement.classList.add('ec-ouvert');
+      // si le service de connexion ne répond pas (pas d'internet), on laisse entrer quand même
+      setTimeout(function () { if (!window.LSFSync || !window.LSFSync.info.dispo) { e.hidden = true; document.documentElement.classList.remove('ec-ouvert'); } }, 12000);
+    })();
+  </script>
+
   <header class="barre">
     <a class="marque" href="#/" aria-label="Langue des signes pour Maëlle, accueil">
       <span class="marque-signe" aria-hidden="true">
