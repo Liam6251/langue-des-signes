@@ -26,13 +26,13 @@
     l: { nom: 'L', rarete: 'epique', peau: '#F2E4D8', cheveux: '#15141A', haut: '#ECE9E3', coiffure: 'ebouriffe', noeud: 'aucun', cernes: true },
     // personnages secrets : débloqués avec l'XP (voir Progrès)
     // (ids « lune » et « oni » gardés pour ne pas casser les sauvegardes)
-    // ordre de déblocage : Coraline (épique) → Arthur (légendaire) → ZZ (légendaire) → Mavis (mythique) → Koro Sensei → Alysa Liu → Ryuk
+    // ordre de déblocage : Coraline (épique) → Arthur (légendaire) → ZZ (légendaire) → Mavis (mythique) → Alysa Liu → Koro Sensei → Ryuk
     coraline: { nom: 'Coraline', rarete: 'epique', peau: '#F5DCC9', cheveux: '#2E55D4', haut: '#F2BE2A', coiffure: 'carre', noeud: 'aucun', theme: 'coraline', secret: true, xp: 75 },
     arthur: { nom: 'Arthur', rarete: 'legendaire', peau: '#F6D8C4', cheveux: '#C8461E', haut: '#EEEAE2', coiffure: 'carre', noeud: 'aucun', theme: 'arthur', secret: true, xp: 150 },
     zz: { nom: 'Zuko', rarete: 'legendaire', peau: '#F2D3B6', cheveux: '#17141A', haut: '#7E2620', coiffure: 'carre', noeud: 'aucun', theme: 'zz', secret: true, xp: 185 },
     mavis: { nom: 'Mavis', rarete: 'mythique', peau: '#F3E3E6', cheveux: '#16131B', haut: '#1D1A23', coiffure: 'carre', noeud: 'aucun', theme: 'mavis', secret: true, xp: 220 },
-    lune: { nom: 'Koro Sensei', rarete: 'secret', peau: '#FFD21F', cheveux: '#5A3A08', haut: '#1C1A22', coiffure: 'carre', noeud: 'aucun', theme: 'lune', secret: true, xp: 300 },
-    alysa: { nom: 'Alysa Liu', rarete: 'secret', peau: '#F4D8C2', cheveux: '#E8D6B4', haut: '#F3F1F6', coiffure: 'carre', noeud: 'aucun', theme: 'alysa', secret: true, xp: 500 },
+    alysa: { nom: 'Alysa Liu', rarete: 'secret', peau: '#F4D8C2', cheveux: '#E8D6B4', haut: '#F3F1F6', coiffure: 'carre', noeud: 'aucun', theme: 'alysa', secret: true, xp: 300 },
+    lune: { nom: 'Koro Sensei', rarete: 'secret', peau: '#FFD21F', cheveux: '#5A3A08', haut: '#1C1A22', coiffure: 'carre', noeud: 'aucun', theme: 'lune', secret: true, xp: 500 },
     oni: { nom: 'Ryuk', rarete: 'secret', peau: '#DCDFE6', cheveux: '#14151B', haut: '#17171D', coiffure: 'carre', noeud: 'aucun', theme: 'oni', secret: true, xp: 800 }
   };
   Object.values(PERSOS).forEach((p) => { p.cernes = !!p.cernes; p.theme = p.theme || null; if (!RARETES[p.rarete]) p.rarete = 'commun'; });

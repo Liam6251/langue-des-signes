@@ -80,11 +80,9 @@
 
   function majStatut() {
     const st = window.LSFStore.etat;
-    // personnage secret débloqué grâce à l'XP : on l'annonce une seule fois
-    window.LSFStore.nouveauxSkins().forEach((id, i) => {
-      const p = window.LSFStore.PERSOS[id];
-      setTimeout(() => U.toast('Personnage secret débloqué : ' + p.nom + ' ! Va le choisir dans Progrès.', 'badge-toast'), 700 + i * 1200);
-    });
+    // personnage secret débloqué grâce à l'XP : grande animation plein écran, une seule fois (js/deblocage.js)
+    const nouveaux = window.LSFStore.nouveauxSkins();
+    if (nouveaux.length) window.LSFDeblocage.annoncer(nouveaux);
     const n = window.LSFStore.serieActuelle();
     document.getElementById('pastille-serie').innerHTML = `${I.flamme.replace('<svg', '<svg fill="currentColor"')}<span>${n}</span><span class="sr"> jour${n > 1 ? 's' : ''} de suite</span>`;
     document.getElementById('pastille-xp').innerHTML = `<span>${st.xp}</span><span aria-hidden="true">XP</span><span class="sr"> points</span>`;

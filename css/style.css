@@ -1506,3 +1506,100 @@ html.ec-ouvert, html.ec-ouvert body { overflow: hidden; }
 .ec-voir input { width: 18px; height: 18px; accent-color: var(--sakura); }
 @keyframes ec-arrive { from { opacity: 0; transform: translateY(18px) scale(.97); } }
 .mouvement-reduit .ec-carte, .mouvement-reduit .ec-attente { animation: none; }
+
+/* =====================================================================
+   DÉBLOCAGE D'UN PERSONNAGE SECRET (js/deblocage.js)
+   Écran plein qui passe au-dessus de tout. Les couleurs viennent de la rareté :
+   la classe r-<rareté> posée sur .deb donne --r, --r-clair et --r-sombre.
+   ===================================================================== */
+html.deb-ouvert, html.deb-ouvert body { overflow: hidden; }
+.deb {
+  position: fixed; inset: 0; z-index: 90; overflow: hidden; color: #fff;
+  background: radial-gradient(90% 60% at 50% 45%, color-mix(in srgb, var(--r-sombre) 55%, #0A0309), #0A0309 62%, #050205);
+}
+/* fond assombri pendant la « charge » */
+.deb-voile { position: absolute; inset: 0; background: radial-gradient(60% 45% at 50% 50%, transparent, rgba(0, 0, 0, .85)); opacity: 0; pointer-events: none; z-index: 3; }
+.deb-scene {
+  position: relative; z-index: 2; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(14px, 3vh, 30px); padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+}
+.deb-entete { text-align: center; display: grid; gap: 6px; }
+.deb-sur { margin: 0; font-weight: 700; font-size: clamp(11px, 2.6vw, 14px); letter-spacing: .24em; text-transform: uppercase; color: var(--r-clair); opacity: .85; }
+/* hauteur fixe : le titre n'apparaît qu'à la fin, la carte ne doit pas sauter */
+.deb-titre { margin: 0; height: 1.15em; font: 800 clamp(40px, 11vw, 64px)/1.1 var(--f-titre); letter-spacing: -.01em; }
+.deb-titre > span[aria-hidden] {
+  display: inline-block; background: linear-gradient(180deg, #FFFFFF 10%, var(--r-clair) 55%, var(--r)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--r) 75%, transparent));
+}
+.deb-titre .esp { width: .28em; }
+
+/* zone de la carte : rayons et halo sont centrés dessus */
+.deb-zone { position: relative; display: grid; place-items: center; }
+.deb-rayons {
+  position: absolute; left: 50%; top: 50%; width: 1400px; height: 1400px; margin: -700px 0 0 -700px; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: repeating-conic-gradient(from 0deg, transparent 0deg 6deg, color-mix(in srgb, var(--r) 22%, transparent) 6deg 10deg, transparent 10deg 15deg, rgba(255, 190, 120, .1) 15deg 17deg, transparent 17deg 22deg);
+  -webkit-mask: radial-gradient(closest-side, #000 14%, transparent 70%); mask: radial-gradient(closest-side, #000 14%, transparent 70%);
+  animation: deb-tourne 30s linear infinite;
+}
+.deb-halo {
+  position: absolute; left: 50%; top: 50%; width: 760px; height: 760px; margin: -380px 0 0 -380px; border-radius: 50%; pointer-events: none; opacity: .22;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--r) 55%, transparent), color-mix(in srgb, var(--r) 12%, transparent) 55%, transparent);
+}
+@keyframes deb-tourne { to { rotate: 360deg; } }
+.deb-flotte { position: relative; z-index: 2; perspective: 1500px; }
+.deb-flotte.vole { animation: deb-flotte 4.2s ease-in-out infinite; }
+@keyframes deb-flotte { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -12px; rotate: .6deg; } }
+
+/* la carte, en grand (taille limitée par la largeur ET la hauteur de l'écran) */
+.deb .deb-carte { width: min(300px, 76vw, 44dvh); box-sizing: border-box; padding: 16px 16px 20px; gap: 10px; border-radius: 28px; border-width: 2px; cursor: default; transform-origin: 50% 50%; }
+.deb .deb-carte .perso-portrait { border-radius: 20px; }
+.deb .deb-carte .perso-nom { font-size: clamp(24px, 6vw, 32px); line-height: 1.1; min-height: 1.1em; text-align: center; }
+.deb .deb-carte .perso-rarete { font-size: 15px; padding: 5px 14px; border-radius: 13px; top: -14px; right: -12px; }
+.deb .deb-carte .perso-xp { font-size: 17px; margin-top: -4px; }
+.deb .deb-carte .perso-jauge { height: 10px; }
+.deb .deb-carte .perso-jauge > span { position: relative; overflow: hidden; }
+.deb .deb-carte .perso-jauge > span::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .75) 50%, transparent 70%); animation: deb-balaye 1.8s ease-in-out infinite; }
+@keyframes deb-balaye { from { translate: -100% 0; } to { translate: 100% 0; } }
+.deb .deb-carte .perso-cadenas { width: 70px; height: 70px; top: 36%; border-width: 2px; }
+.deb .deb-carte .perso-cadenas svg { width: 34px; height: 34px; overflow: visible; }
+.deb .deb-carte.verrouille .perso-aura { display: none; }
+.deb .deb-carte.verrouille { cursor: default; }
+/* XP atteint : la carte verrouillée pulse avant de s'ouvrir */
+.deb .deb-carte.verrouille.pret { border-color: color-mix(in srgb, var(--r) 75%, transparent); animation: deb-pret 1.6s ease-in-out infinite; }
+@keyframes deb-pret { 0%, 100% { box-shadow: 0 5px 0 #000, 0 0 16px -6px var(--r); } 50% { box-shadow: 0 5px 0 #000, 0 0 46px 2px var(--r); } }
+.deb .verrouille.pret .perso-cadenas { animation: deb-cadenas 1.6s ease-in-out infinite; }
+@keyframes deb-cadenas { 0%, 100% { scale: 1; box-shadow: 0 0 16px -4px var(--r); } 50% { scale: 1.07; box-shadow: 0 0 34px 2px var(--r); } }
+
+/* boutons de fin */
+.deb-boutons { display: grid; gap: 8px; width: 100%; }
+.deb-boutons[hidden] { display: none; }
+.deb-choisir {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 52px; padding: 0 12px; border: 0; border-radius: 16px; cursor: pointer;
+  font: 800 clamp(17px, 4.6vw, 20px)/1.1 var(--f-titre); color: var(--r-sombre); background: linear-gradient(180deg, #FFFFFF, var(--r-clair));
+  box-shadow: 0 5px 0 var(--r-sombre), 0 0 34px -4px var(--r); transition: translate .15s, box-shadow .15s, filter .15s;
+}
+.deb-choisir svg { width: 22px; height: 22px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.deb-choisir:hover { filter: brightness(1.06); translate: 0 -2px; box-shadow: 0 7px 0 var(--r-sombre), 0 0 44px -2px var(--r); }
+.deb-choisir:active { translate: 0 3px; box-shadow: 0 2px 0 var(--r-sombre), 0 0 24px -6px var(--r); }
+.deb-plus-tard { justify-self: center; padding: 8px 14px; border: 0; border-radius: 10px; background: none; color: rgba(255, 255, 255, .7); font: 700 15px/1 var(--f-texte); cursor: pointer; }
+.deb-plus-tard:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.deb button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* effets posés sur la carte : flash blanc et reflet qui balaie */
+.deb-flash, .deb-reflet { position: absolute !important; inset: 0; border-radius: inherit; pointer-events: none; z-index: 5 !important; }
+.deb-flash { background: radial-gradient(70% 55% at 50% 36%, #fff, color-mix(in srgb, var(--r-clair) 85%, transparent) 45%, color-mix(in srgb, var(--r) 35%, transparent)); opacity: 0; }
+.deb-reflet { overflow: hidden; }
+.deb-reflet::before { content: ""; position: absolute; top: -20%; bottom: -20%; width: 45%; left: 0; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .7), transparent); transform: skewX(-18deg) translateX(-160%); }
+.deb-reflet.go::before { animation: deb-reflet .9s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes deb-reflet { to { transform: skewX(-18deg) translateX(330%); } }
+
+/* éclats du cadenas, ondes de choc, flash d'écran, particules (au-dessus de la scène) */
+.deb-couche { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
+.deb-eclat { position: absolute; background: linear-gradient(140deg, #FFFFFF, var(--r-clair) 45%, var(--r)); filter: drop-shadow(0 0 6px var(--r)); }
+.deb-onde { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 0 24px var(--r), inset 0 0 18px var(--r); }
+.deb-flash-ecran { position: absolute; inset: 0; background: radial-gradient(55% 45% at 50% 50%, rgba(255, 255, 255, .95), color-mix(in srgb, var(--r) 35%, transparent) 60%, transparent); opacity: 0; pointer-events: none; z-index: 7; }
+.deb-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 8; }
+
+/* version calme (animations coupées dans Réglages) : rayons visibles mais immobiles */
+.mouvement-reduit .deb.deb-revele .deb-rayons { opacity: .7; animation: none; }
+.mouvement-reduit .deb .deb-carte { animation: none; }
